@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace GrpcService
@@ -21,7 +24,20 @@ namespace GrpcService
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    var cert = new X509Certificate2("RootCA.pfx", "pentacomp"); 
+                    var handler = new HttpClientHandler();
+                    webBuilder.UseStartup<Startup>()
+                    .ConfigureKestrel(kestrelServerOptions => {
+                        kestrelServerOptions.ConfigureHttpsDefaults(opt =>
+                        {
+                            opt.ClientCertificateMode = ClientCertificateMode.AllowCertificate;
+                            opt.ServerCertificate = cert;
+
+                            //// Verify that client certificate was issued by same CA as server certificate
+                            //opt.ClientCertificateValidation = (certificate, chain, errors) =>
+
+                        });
+                    });
                 });
     }
 }
