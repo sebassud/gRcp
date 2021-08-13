@@ -20,8 +20,11 @@ namespace GrpcClient
                 HttpClient = httpClient
             });
             var client = new GreeterClient(channel);
+
+            var p1 = new Person() { FirstName = "Sebastian", LastName = "Enigman" };
+
             var reply = client.SayHelloAsync(
-                              new HelloRequest { FirstName = "Sebastian", LastName = "Enigman" });
+                              new HelloRequest { Person = p1 });
             Console.WriteLine("Greeting: " + reply.ResponseAsync.Result.Message);
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();

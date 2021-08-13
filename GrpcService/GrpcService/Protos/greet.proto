@@ -2,6 +2,9 @@ syntax = "proto3";
 
 option csharp_namespace = "GrpcService";
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
 package greet;
 
 // The greeting service definition.
@@ -12,11 +15,26 @@ service Greeter {
 
 // The request message containing the user's name.
 message HelloRequest {
-  string first_name = 1;
-  string last_name = 2;
+  Person person = 1;
 }
 
 // The response message containing the greetings.
 message HelloReply {
   string message = 1;
+}
+
+message Person{
+  string first_name = 1;
+  string last_name = 2;
+  google.protobuf.Int32Value age = 3;
+  string pesel = 4;
+  Sex sex = 5;
+  double amount = 6;
+  google.protobuf.Timestamp date_birth = 7;
+}
+
+enum Sex {
+  FEMALE = 0;
+  MAN = 1;
+  UNKNOWN = 2;
 }
