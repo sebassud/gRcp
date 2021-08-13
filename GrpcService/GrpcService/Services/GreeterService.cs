@@ -1,8 +1,10 @@
 using Grpc.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GrpcService
@@ -10,16 +12,23 @@ namespace GrpcService
     public class GreeterService : Greeter.GreeterBase
     {
         private readonly ILogger<GreeterService> _logger;
-        public GreeterService(ILogger<GreeterService> logger)
+        private readonly IHttpContextAccessor httpContext;
+        public GreeterService(ILogger<GreeterService> logger, IHttpContextAccessor context)
         {
             _logger = logger;
+            httpContext = context;
         }
 
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
         {
+            var user = httpContext.HttpContext.User;
+            var thumbprint = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Thumbprint);
+            var result = $"Hello {request.FirstName} {request.LastName} ({thumbprint.Value})";
+
+            _logger.LogInformation(result);
             return Task.FromResult(new HelloReply
             {
-                Message = $"Hello {request.FirstName} {request.LastName}"
+                Message = result
             });
         }
     }
