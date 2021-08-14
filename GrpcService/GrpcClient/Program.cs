@@ -1,4 +1,5 @@
-﻿using Grpc.Net.Client;
+﻿using Google.Protobuf.WellKnownTypes;
+using Grpc.Net.Client;
 using GrpcService;
 using System;
 using System.Net.Http;
@@ -22,10 +23,25 @@ namespace GrpcClient
             var client = new GreeterClient(channel);
 
             var p1 = new Person() { FirstName = "Sebastian", LastName = "Enigman" };
+            var p2 = new Person() 
+            { 
+                FirstName = "Sebastian", 
+                LastName = "Enigman",
+                Age = 25,
+                Amount = 1234.99,
+                Sex = Sex.Male,
+                Pesel = "95042903912",
+                DateBirth = Timestamp.FromDateTime(DateTime.UtcNow)
+            };
 
             var reply = client.SayHelloAsync(
                               new HelloRequest { Person = p1 });
             Console.WriteLine("Greeting: " + reply.ResponseAsync.Result.Message);
+
+            var reply2 = client.SayHelloAsync(
+                              new HelloRequest { Person = p2 });
+            Console.WriteLine("Greeting: " + reply2.ResponseAsync.Result.Message);
+
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }

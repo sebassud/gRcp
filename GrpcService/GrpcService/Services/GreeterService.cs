@@ -24,7 +24,7 @@ namespace GrpcService
             var user = httpContext.HttpContext.User;
             var thumbprint = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Thumbprint);
             var result = @$"Hello 
-                            Imie:{request.Person.FirstName} 
+                            Imie: {request.Person.FirstName} 
                             Nazwisko: {request.Person.LastName}
                             Age: {request.Person.Age}
                             Pesel: {request.Person.Pesel}
