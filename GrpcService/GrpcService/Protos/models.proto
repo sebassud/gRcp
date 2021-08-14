@@ -14,12 +14,12 @@ message Person{
   google.protobuf.Int32Value age = 3;
   string pesel = 4;
   Sex sex = 5;
-  double amount = 6;
+  google.protobuf.DoubleValue amount = 6;
   google.protobuf.Timestamp date_birth = 7;
 }
 
 enum Sex {
-  FEMALE = 0;
-  MALE = 1;
-  UNKNOWN = 2;
+  UNKNOWN = 0;
+  FEMALE = 1;
+  MALE = 2;
 }

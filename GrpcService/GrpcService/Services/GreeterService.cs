@@ -31,6 +31,7 @@ namespace GrpcService
                             Sex: {request.Person.Sex}
                             Amount: {request.Person.Amount}
                             DateBirth: {request.Person.DateBirth?.ToDateTime()}
+                            Animals: {String.Join(", ", request.Animals)}
                             ({thumbprint.Value})";
 
             _logger.LogInformation(result);

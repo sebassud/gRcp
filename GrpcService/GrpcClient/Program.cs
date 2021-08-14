@@ -2,6 +2,7 @@
 using Grpc.Net.Client;
 using GrpcService;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using static GrpcService.Greeter;
@@ -34,12 +35,14 @@ namespace GrpcClient
                 DateBirth = Timestamp.FromDateTime(DateTime.UtcNow)
             };
 
-            var reply = client.SayHelloAsync(
-                              new HelloRequest { Person = p1 });
+            var request = new HelloRequest { Person = p1 };           
+            var reply = client.SayHelloAsync(request);
             Console.WriteLine("Greeting: " + reply.ResponseAsync.Result.Message);
 
-            var reply2 = client.SayHelloAsync(
-                              new HelloRequest { Person = p2 });
+            var animals = new List<string>() { "Pies", "Kot", "Królik" };
+            var request2 = new HelloRequest { Person = p1 };
+            request2.Animals.AddRange(animals);
+            var reply2 = client.SayHelloAsync(request2);
             Console.WriteLine("Greeting: " + reply2.ResponseAsync.Result.Message);
 
             Console.WriteLine("Press any key to exit...");
